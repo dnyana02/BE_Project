@@ -232,7 +232,29 @@ answerCandidates.onSnapshot((snapshot) => {
 
 // hangupButton.disabled = false;
 console.log("This is the offer ID",callDoc.id); //This id is displayed for us on the text BaseAudioContext, which we share to remote user
+console.log("Webcam call id",callDoc.id); 
+  sendEmail(callDoc.id);
 };
+
+  
+
+  //Offer key Email sending
+function sendEmail(callId) {
+  console.log('Mail function');
+  Email.send({
+      //4a226f19-fc37-44d2-9f30-b2f945f30343
+      Host : "smtp.elasticemail.com",
+      Username : "demoaccforstudy@gmail.com",
+      Password : "1CD782890803C0BA241E87AA3D9F2C5D12C4",
+      To : 'dnyaneshm2000@gmail.com',
+      From : "demoaccforstudy@gmail.com",
+      Subject : "This is the subject",
+      Body :callId
+  }).then(
+    message => alert(message)
+  );
+  console.log('Mail is sent successfully');
+  } 
 
 
 

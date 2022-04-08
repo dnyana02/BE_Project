@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <title>Webcam</title>
+    
     <script type="module" src="{% static 'js/webcam.js' %}"></script>
     <script type="text/javascript">
 
@@ -36,11 +37,7 @@ image.Save("output.jpg", ImageFormat.Jpeg); // Or Png
           <select id="photo-filter" class="select">
             <option value="none">Normal</option>
             <option value="grayscale(100%)">Grayscale</option>
-            <option value="sepia(100%)">Sepia</option>
-            <option value="invert(100%)">Invert</option>
-            <option value="hue-rotate(90deg)">Hue</option>
-            <option value="blur(10px)">Blur</option>
-            <option value="contrast(200%)">Contrast</option>
+            
           </select>
           <button id="clear-button" class="btn btn-light">Clear</button>
           <canvas id="canvas"></canvas>

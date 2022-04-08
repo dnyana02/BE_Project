@@ -9,16 +9,10 @@ const firebaseConfig = {
     appId: "1:299736381939:web:d03cc888b5deb6b5a4fa86"
   };
   firebase.initializeApp(firebaseConfig);
-// console.log(firebase);
+
 const firestore = firebase.firestore();
 console.log("Hello World!")
-// const callDoc = firestore.collection('calls').doc();
-// window.onload = get_cust_id;
 
-//   const offerCandidates = callDoc.collection('offerCandidates');
-  
-//   const answerCandidates = callDoc.collection('answerCandidates');
-//The below function will ask for ID of the customer.
 function get_cust_id(){
     let cust_id=prompt("Please enter the customer ID");
     // if(!cust_id){
@@ -42,21 +36,25 @@ const servers = {
     ],
     iceCandidatePoolSize: 10,
   };
-  const remoteVideo = document.getElementById('remoteVideo');
+  
   const video = document.getElementById('localVideo');
   const localVideo = document.getElementById('localVideo');
 const pc = new RTCPeerConnection(servers);
-localStream =  navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
-  // Link to the video source
-  localVideo.srcObject = stream;
-  // Play video
-  localVideo.play();
-  console.log('photoButton');
-})
-.catch(function(err) {
-  console.log(`Error: ${err}`);
-});
 
+// =================Extra Function for video input=================
+// localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
+//   // Link to the video source
+//   localVideo.srcObject = stream;
+//   // Play video
+//   localVideo.play();
+//   console.log('photoButton');
+// })
+// .catch(function(err) {
+//   console.log(`Error: ${err}`);
+// });
+//========================================================
+
+localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
 
 let width = 500,
 height = 0,
@@ -173,7 +171,7 @@ const action = async() => {
     //     });
     // }
     localVideo.srcObject = localStream;
-    // remoteVideo.srcObject = remoteStream;
+    
     const callDoc = firestore.collection('calls').doc();
     const offerCandidates = callDoc.collection('offerCandidates');
     const answerCandidates = callDoc.collection('answerCandidates');
@@ -183,7 +181,7 @@ const action = async() => {
     callDoc.onSnapshot((snapshot) => {
         const data = snapshot.data();
         
-    console.log(data);
+   
     
         if (!pc.currentRemoteDescription && data?.answer) {
           const answerDescription = new RTCSessionDescription(data.answer);
@@ -206,7 +204,8 @@ const action = async() => {
     }
     const action1 = async() =>{
 
-  const callId=cust_id;  
+  const callId=cust_id; //Offer Id for Webcam
+  
   const callDoc = firestore.collection('calls').doc(callId);
   const answerCandidates = callDoc.collection('answerCandidates');
   const offerCandidates = callDoc.collection('offerCandidates');
@@ -240,5 +239,10 @@ const action = async() => {
     });
   });
 }
+
+
+
+
+
 action();
 action1();
