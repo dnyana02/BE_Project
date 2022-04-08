@@ -10,12 +10,48 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <title>Webcam</title>
     <script type="module" src="{% static 'js/webcam.js' %}"></script>
+    <script type="text/javascript">
+
+       /* function cap() {
+            var canvas = document.getElementById("canvas");
+document.getElementById("#<%= hdnimageBytes.ClientID %>").value = canvas.toDataURL();
+
+  
+       byte[] bitmap = hdnimageBytes.Value;
+      using(Image image = Image.FromStream(new MemoryStream(bitmap))) 
+{ 
+image.Save("output.jpg", ImageFormat.Jpeg); // Or Png 
+}
+            } */
+    </script>
 </head>
 <body>
     <h3>Local Stream</h3>
         <video id="localVideo" autoplay playsinline></video>
-    <h3>Remote Stream</h3>
-        <video id="remoteVideo" autoplay playsinline></video>
+        <!-- <button onclick="capture()">Capture</button>
+        <canvas id="canvas" style="overflow:auto"></canvas> -->
+        <button id="photo-button" class="btn btn-dark">
+            Take Photo
+          </button>
+          <select id="photo-filter" class="select">
+            <option value="none">Normal</option>
+            <option value="grayscale(100%)">Grayscale</option>
+            <option value="sepia(100%)">Sepia</option>
+            <option value="invert(100%)">Invert</option>
+            <option value="hue-rotate(90deg)">Hue</option>
+            <option value="blur(10px)">Blur</option>
+            <option value="contrast(200%)">Contrast</option>
+          </select>
+          <button id="clear-button" class="btn btn-light">Clear</button>
+          <canvas id="canvas"></canvas>
+        </div>
+        <div class="bottom-container">
+          <div id="photos"></div>
+        </div>
+    
+
+ <h3>Remote Stream</h3>
+        <video id="remoteVideo" autoplay playsinline></video> 
             
 
 </body>
