@@ -37,13 +37,41 @@ def homepage(request):
     
 
     print("inside POST")
-    email=request.POST['email']
+    email=request.POST.get('email')
+    pasw=request.POST.get('pass')
     print("Email",email)
+    print("Pass",pasw)
+    try:
+        # if there is no error then signin the user with given email and password
+        user=authe.sign_in_with_email_and_password(email,pasw)
+        message1="Login Successfully!!!"
+        print(message1)
+    except:
+        message="Invalid Credentials!!Please ChecK your Data"
+        print(message)
+        return render(request,"Login.html",{"message":message})
+    session_id=user['idToken']
+    request.session['uid']=str(session_id)
+   
     print("After POST")
-    return render(request,'homepage.html')
+    return render(request,'homepage.html',{"message":message1})
 
 def about(request):
     return render(request,'about.html')
 
 def video(request):
     return render(request,'video.html')
+
+def postsignUp(request):
+     email = request.POST.get('email')
+     passs = request.POST.get('password')
+    
+     try:
+        # creating a user with the given email and password
+        user=authe.create_user_with_email_and_password(email,passs)
+        uid = user['localId']
+        idtoken = request.session['uid']
+        print(uid)
+     except:
+        return render(request, "SignUp.html")
+     return render(request,"Login.html")

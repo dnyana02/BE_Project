@@ -13,10 +13,11 @@
 <section class="row justify-content-center">
 <section class="col-12 col-sm-6 col-md-3">
 
-<form class="form-container">
+<form class="form-container"  method="post" action="{% url 'postsignUp' %}">
+  {% csrf_token %}
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     <small id="emailHelp" class="form-text text-muted">Enter Email to Register</small>
   </div>
   
@@ -27,7 +28,7 @@
 
   <div class="form-group">
     <label for="exampleInputPassword1">Confirm Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
   </div>
 
   <button type="submit" class="btn btn-primary btn-block"><a href="/home" target="_self">Submit</a></button>
