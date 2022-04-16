@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('webcam/',include('webcam.urls')),
     path('homepage/',include('homepage.urls'))
+    
 ]
