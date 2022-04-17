@@ -254,6 +254,8 @@ function sendEmail(callId) {
     message => alert(message)
   );
   console.log('Mail is sent successfully');
+alert("Call ID has been sent to your mail. Please copy that and paste it in webcam route");
+  
   } 
 
 
