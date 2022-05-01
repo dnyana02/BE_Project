@@ -11,7 +11,7 @@ const firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
 
 const firestore = firebase.firestore();
-console.log("Hello World!")
+console.log("Hello World!");
 
 function get_cust_id(){
     let cust_id=prompt("Please enter the customer ID");
