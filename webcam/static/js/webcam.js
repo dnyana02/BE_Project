@@ -162,6 +162,74 @@ const action = async() => {
         pc.addTrack(track, localStream);
         console.log(localStream)
     });
+
+
+    ///////////////////////////////////////////////////////////////
+     
+
+    let camera_button = document.querySelector("#start-camera");
+
+let start_button = document.querySelector("#start-record");
+let stop_button = document.querySelector("#stop-record");
+let download_link = document.querySelector("#download-video");
+
+let camera_stream = null;
+let media_recorder = null;
+let blobs_recorded = [];
+
+
+
+  console.log("Download Video Strat...")
+//   var videoElem = document.getElementById('localVideo');   
+//   var videoStream = videoElem.captureStream();
+//   // stream.addTrack(videoStream.getAudioTracks()[0]);
+//   localStream.addTrack(canvas.captureStream().getVideoTracks()[0]);
+//   var options = {mimeType: 'video/webm'};
+//   var recordedBlobs = [];
+//   var mediaRecorder = new MediaRecorder(localStream, options);
+//   // mediaRecorder.onstop = handleStop;
+//   // mediaRecorder.ondataavailable = handleDataAvailable;
+//   mediaRecorder.start(30*1000); // collect 100ms of data
+  
+
+//   function handleDataAvailable(event) {
+//     if (event.data && event.data.size > 0) {
+//       recordedBlobs.push(event.data);
+//       let video_local =URL.createObjectURL( new Blob(recordedBlobs, {type: 'video/mp4'}));
+//       download_link.href=video_local;
+//    }
+//   }
+// mediaRecorder.stop();
+
+
+start_button.addEventListener('click', function() {
+  // set MIME type of recording as video/webm
+  media_recorder = new MediaRecorder(localStream, { mimeType: 'video/webm' });
+  //media_recorder.start(30*1000);
+  // event : new recorded video blob available 
+  media_recorder.addEventListener('dataavailable', function(e) {
+  blobs_recorded.push(e.data);
+  });
+
+  // event : recording stopped & all blobs sent
+  media_recorder.addEventListener('stop', function() {
+    // create local object URL from the recorded video blobs
+    let video_local = URL.createObjectURL(new Blob(blobs_recorded, { type: 'video/mp4' }));
+    download_link.href = video_local;
+  });
+
+  // start recording with each recorded blob having 1 second video
+  media_recorder.start(30*1000);
+});
+
+stop_button.addEventListener('click', function() {
+media_recorder.stop(); 
+});
+
+
+console.log("Download Video End...")
+
+    ///////////////////////////////////////////////////////////////
     
     // Pull tracks from remote stream, add to video stream
     // pc.ontrack = (event) => {
