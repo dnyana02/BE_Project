@@ -214,8 +214,36 @@ start_button.addEventListener('click', function() {
   // event : recording stopped & all blobs sent
   media_recorder.addEventListener('stop', function() {
     // create local object URL from the recorded video blobs
-    let video_local = URL.createObjectURL(new Blob(blobs_recorded, { type: 'video/mp4' }));
-    download_link.href = video_local;
+    // let video_local = URL.createObjectURL(new Blob(blobs_recorded, { type: 'video/mp4' }));
+    // download_link.href = video_local;
+    var inner = document.querySelector('.inner');
+    var video = document.createElement('video');
+    video.controls = true;
+    
+    var source = document.createElement('source');
+    source.src = URL.createObjectURL(new Blob(blobs_recorded, { type: 'video/mp4' }));
+    source.type = 'video/mp4; codecs=mpeg4';
+    video.appendChild(source);
+
+    video.download = 'Play mp4 in VLC Player.mp4';
+
+    inner.appendChild(document.createElement('hr'));
+    var h2 = document.createElement('h2');
+    h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
+    inner.appendChild(h2);
+    h2.style.display = 'block';
+    inner.appendChild(video);
+
+    video.tabIndex = 0;
+    video.focus();
+    video.play();
+
+
+
+
+
+
+
   });
 
   // start recording with each recorded blob having 1 second video
