@@ -1,4 +1,3 @@
-
 //Initializing firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDVr9y6YoHToa8xPu-XRTtdVcZ2mNDUXus",
@@ -68,7 +67,9 @@ const photos = document.getElementById('photos');
 const photoButton = document.getElementById('photo-button');
 const clearButton = document.getElementById('clear-button');
 const photoFilter = document.getElementById('photo-filter');
-
+let start_button = document.querySelector("#start-record");
+let stop_button = document.querySelector("#stop-record");
+let download_link = document.querySelector("#download-video");
 
 
   // Play when ready
@@ -169,9 +170,7 @@ const action = async() => {
 
     let camera_button = document.querySelector("#start-camera");
 
-let start_button = document.querySelector("#start-record");
-let stop_button = document.querySelector("#stop-record");
-let download_link = document.querySelector("#download-video");
+
 
 let camera_stream = null;
 let media_recorder = null;
@@ -231,23 +230,18 @@ start_button.addEventListener('click', function() {
     var h2 = document.createElement('h2');
     h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
     inner.appendChild(h2);
+    const a=h2.childNodes[0];
+    a.click();
     h2.style.display = 'block';
     inner.appendChild(video);
 
     video.tabIndex = 0;
     video.focus();
     video.play();
-
-
-
-
-
-
-
   });
 
   // start recording with each recorded blob having 1 second video
-  media_recorder.start(30*1000);
+  media_recorder.start(1000);
 });
 
 stop_button.addEventListener('click', function() {
@@ -334,11 +328,35 @@ console.log("Download Video End...")
       }
     });
   });
+  function startbut(){
+    start_button.click();
+
+  }
+  function stopbut(){
+    stop_button.click();
+  }
+  function download(){
+    const a=h2.childNodes[0];
+    a.click();
+  }
+  while(true){
+    setInterval(startbut,3000).then(
+      setInterval(stopbut,15000))
+        
+      
+  }
 }
 
 
 
 
+function auto_stop(){
+  document.querySelector('#stop-recording-video').click();
 
-action();
-action1();
+}
+action().then(
+  action1());
+
+  
+
+
