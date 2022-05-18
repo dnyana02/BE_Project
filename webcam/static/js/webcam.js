@@ -67,8 +67,8 @@ const photos = document.getElementById('photos');
 const photoButton = document.getElementById('photo-button');
 const clearButton = document.getElementById('clear-button');
 const photoFilter = document.getElementById('photo-filter');
-let start_button = document.querySelector("#start-record");
-let stop_button = document.querySelector("#stop-record");
+let start_button = document.querySelector("#record-video");
+let stop_button = document.querySelector("#stop-recording-video");
 let download_link = document.querySelector("#download-video");
 
 
@@ -168,17 +168,182 @@ const action = async() => {
     ///////////////////////////////////////////////////////////////
      
 
-    let camera_button = document.querySelector("#start-camera");
-
+let camera_button = document.querySelector("#start-camera");
+var recordVideo;
+var videoPreview = document.getElementById('localVideo');
+var inner = document.querySelector('.inner');
 
 
 let camera_stream = null;
 let media_recorder = null;
 let blobs_recorded = [];
 
+document.querySelector('#record-video').onclick = function() {
+  this.disabled = true;
+  navigator.getUserMedia({
+          video: true
+      }, function(stream) {
+          videoPreview.srcObject = stream;
+          videoPreview.play();
 
+          recordVideo = RecordRTC(stream, {
+              type: 'video'
+          });
 
-  console.log("Download Video Strat...")
+          recordVideo.startRecording();
+      }, function(error) { throw error;});
+  document.querySelector('#stop-recording-video').disabled = false;
+};
+
+document.querySelector('#stop-recording-video').onclick = function() {
+  this.disabled = true;
+
+  recordVideo.stopRecording(function(url) {
+      videoPreview.src = url;
+      videoPreview.download = 'video.webm';
+
+      // log('<a href="'+ workerPath +'" download="ffmpeg-asm.js">ffmpeg-asm.js</a> file download started. It is about 18MB in size; please be patient!');
+      convertStreams(recordVideo.getBlob());
+  });
+};
+
+var workerPath = 'https://archive.org/download/ffmpeg_asm/ffmpeg_asm.js';
+if(document.domain == 'localhost') {
+  workerPath = location.href.replace(location.href.split('/').pop(), '') + 'ffmpeg_asm.js';
+}
+
+function processInWebWorker() {
+  var blob = URL.createObjectURL(new Blob(['importScripts("' + workerPath + '");var now = Date.now;function print(text) {postMessage({"type" : "stdout","data" : text});};onmessage = function(event) {var message = event.data;if (message.type === "command") {var Module = {print: print,printErr: print,files: message.files || [],arguments: message.arguments || [],TOTAL_MEMORY: message.TOTAL_MEMORY || false};postMessage({"type" : "start","data" : Module.arguments.join(" ")});postMessage({"type" : "stdout","data" : "Received command: " +Module.arguments.join(" ") +((Module.TOTAL_MEMORY) ? ".  Processing with " + Module.TOTAL_MEMORY + " bits." : "")});var time = now();var result = ffmpeg_run(Module);var totalTime = now() - time;postMessage({"type" : "stdout","data" : "Finished processing (took " + totalTime + "ms)"});postMessage({"type" : "done","data" : result,"time" : totalTime});}};postMessage({"type" : "ready"});'], {
+      type: 'application/javascript'
+  }));
+
+  var worker = new Worker(blob);
+  URL.revokeObjectURL(blob);
+  return worker;
+}
+
+var worker;
+
+function convertStreams(videoBlob) {
+  var aab;
+  var buffersReady;
+  var workerReady;
+  var posted;
+
+  var fileReader = new FileReader();
+  fileReader.onload = function() {
+      aab = this.result;
+      postMessage();
+  };
+  fileReader.readAsArrayBuffer(videoBlob);
+
+  if (!worker) {
+      worker = processInWebWorker();
+  }
+
+  worker.onmessage = function(event) {
+      var message = event.data;
+      if (message.type == "ready") {
+          //log('<a href="'+ workerPath +'" download="ffmpeg-asm.js">ffmpeg-asm.js</a> file has been loaded.');
+
+          workerReady = true;
+          if (buffersReady)
+              postMessage();
+      } else if (message.type == "stdout") {
+          message.data;
+      } else if (message.type == "start") {
+          //log('<a href="'+ workerPath +'" download="ffmpeg-asm.js">ffmpeg-asm.js</a> file received ffmpeg command.');
+      } else if (message.type == "done") {
+          JSON.stringify(message);
+
+          var result = message.data[0];
+          JSON.stringify(result);
+
+          var blob = new File([result.data], 'test.mp4', {
+              type: 'video/mp4'
+          });
+
+          JSON.stringify(blob);
+
+          PostBlob(blob);
+      }
+  };
+  var postMessage = function() {
+      posted = true;
+
+      worker.postMessage({
+          type: 'command',
+          arguments: '-i video.webm -c:v mpeg4 -b:v 6400k -strict experimental output.mp4'.split(' '),
+          files: [
+              {
+                  data: new Uint8Array(aab),
+                  name: 'video.webm'
+              }
+          ]
+      });
+  };
+}
+
+function PostBlob(blob) {
+  var video = document.createElement('video');
+  video.controls = true;
+
+  var source = document.createElement('source');
+  source.src = URL.createObjectURL(blob);
+  source.type = 'video/mp4; codecs=mpeg4';
+  video.appendChild(source);
+
+  video.download = 'Play mp4 in VLC Player.mp4';
+
+  inner.appendChild(document.createElement('hr'));
+  var h2 = document.createElement('h2');
+  h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
+  inner.appendChild(h2);
+  h2.style.display = 'block';
+  inner.appendChild(video);
+
+  video.tabIndex = 0;
+  video.focus();
+  video.play();
+
+  document.querySelector('#record-video').disabled = false;
+}
+function auto_record(){
+  document.querySelector('#record-video').click();
+
+}
+function auto_stop(){
+  document.querySelector('#stop-recording-video').click();
+
+}
+
+window.onbeforeunload = function() {
+  document.querySelector('#record-video').disabled = false;
+};
+window.onload=function (){
+  setInterval(auto_record,3000).then(
+      setInterval(auto_stop,10000)
+  );
+  
+
+  //document.querySelector('#stop-recording-video').click();
+}
+//var logsPreview = document.getElementById('logs-preview');
+
+// function log(message) {
+//   var li = document.createElement('li');
+//   li.innerHTML = message;
+//   logsPreview.appendChild(li);
+
+//   li.tabIndex = 0;
+//   li.focus();
+// }
+
+window.onbeforeunload = function() {
+  document.querySelector('#record-video').disabled = false;
+};
+
+/*console.log("Download Video Strat...")
 
 
 
@@ -232,7 +397,7 @@ media_recorder.stop();
 
 console.log("Download Video End...")
 
-   
+*/  
     localVideo.srcObject = localStream;
     
     const callDoc = firestore.collection('calls').doc();
@@ -301,32 +466,32 @@ console.log("Download Video End...")
       }
     });
   });
-  function startbut(){
-    start_button.click();
+  // function startbut(){
+  //   start_button.click();
 
-  }
-  function stopbut(){
-    stop_button.click();
-  }
-  function download(){
-    const a=h2.childNodes[0];
-    a.click();
-  }
-  while(true){
-    setInterval(startbut,3000).then(
-      setInterval(stopbut,25000))
+  // }
+  // function stopbut(){
+  //   stop_button.click();
+  // }
+  // function download(){
+  //   const a=h2.childNodes[0];
+  //   a.click();
+  // }
+  // while(true){
+  //   setInterval(startbut,3000).then(
+  //     setInterval(stopbut,25000))
         
       
-  }
+  // }
 }
 
 
 
 
-function auto_stop(){
-  document.querySelector('#stop-recording-video').click();
+// function auto_stop(){
+//   document.querySelector('#stop-recording-video').click();
 
-}
+// }
 action().then(
   action1());
 

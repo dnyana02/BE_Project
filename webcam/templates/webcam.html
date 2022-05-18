@@ -9,7 +9,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <title>Webcam</title>
-    
+    <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"> </script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script type="module" src="{% static 'js/webcam.js' %}"></script>
     <script type="text/javascript">
 
@@ -44,8 +45,8 @@ image.Save("output.jpg", ImageFormat.Jpeg); // Or Png
           <button id="start-camera">Start Camera</button>
           <div class="inner">
             <img src="{% url 'livecam_detection' %}">
-          <button id="start-record">Start Recording</button>
-          <button id="stop-record">Stop Recording</button>
+          <button id="record-video">Start Recording</button>
+          <button id="stop-recording-video">Stop Recording</button>
           
           <a id="download-video" download="test.mp4">Download Video</a>
           </div>
