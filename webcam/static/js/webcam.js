@@ -179,26 +179,7 @@ let blobs_recorded = [];
 
 
   console.log("Download Video Strat...")
-//   var videoElem = document.getElementById('localVideo');   
-//   var videoStream = videoElem.captureStream();
-//   // stream.addTrack(videoStream.getAudioTracks()[0]);
-//   localStream.addTrack(canvas.captureStream().getVideoTracks()[0]);
-//   var options = {mimeType: 'video/webm'};
-//   var recordedBlobs = [];
-//   var mediaRecorder = new MediaRecorder(localStream, options);
-//   // mediaRecorder.onstop = handleStop;
-//   // mediaRecorder.ondataavailable = handleDataAvailable;
-//   mediaRecorder.start(30*1000); // collect 100ms of data
-  
 
-//   function handleDataAvailable(event) {
-//     if (event.data && event.data.size > 0) {
-//       recordedBlobs.push(event.data);
-//       let video_local =URL.createObjectURL( new Blob(recordedBlobs, {type: 'video/mp4'}));
-//       download_link.href=video_local;
-//    }
-//   }
-// mediaRecorder.stop();
 
 
 start_button.addEventListener('click', function() {
@@ -224,11 +205,11 @@ start_button.addEventListener('click', function() {
     source.type = 'video/mp4; codecs=mpeg4';
     video.appendChild(source);
 
-    video.download = 'Play mp4 in VLC Player.mp4';
+    video.download = 'test.mp4';
 
     inner.appendChild(document.createElement('hr'));
     var h2 = document.createElement('h2');
-    h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
+    h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="test.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
     inner.appendChild(h2);
     const a=h2.childNodes[0];
     a.click();
@@ -251,15 +232,7 @@ media_recorder.stop();
 
 console.log("Download Video End...")
 
-    ///////////////////////////////////////////////////////////////
-    
-    // Pull tracks from remote stream, add to video stream
-    // pc.ontrack = (event) => {
-    //     console.log(pc);
-    //     event.streams[0].getTracks().forEach((track) => {
-    //         remoteStream.addTrack(track);
-    //     });
-    // }
+   
     localVideo.srcObject = localStream;
     
     const callDoc = firestore.collection('calls').doc();
@@ -341,7 +314,7 @@ console.log("Download Video End...")
   }
   while(true){
     setInterval(startbut,3000).then(
-      setInterval(stopbut,15000))
+      setInterval(stopbut,25000))
         
       
   }
