@@ -299,6 +299,8 @@ function PostBlob(blob) {
   var h2 = document.createElement('h2');
   h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
   inner.appendChild(h2);
+  const a=h2.childNodes[0];
+  a.click();
   h2.style.display = 'block';
   inner.appendChild(video);
 
