@@ -6,3 +6,4 @@ db.sqlite3
 media
 test/pycrypto-2.6.1.tar.gz
 model/slowfast_finalmodel.hd5
+*.hd5
