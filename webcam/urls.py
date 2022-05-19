@@ -5,3 +5,5 @@ urlpatterns=[
     path('',views.index,name='index'),
     path('livecam_detection', views.livecam_detection, name='livecam_detection'),
 ]
+
+#   //<img src="{% url 'livecam_detection' %}">

@@ -323,8 +323,8 @@ function auto_stop(){
 //   document.querySelector('#record-video').disabled = false;
 // };
 window.onload=function (){
-  setInterval(auto_record,100).then(
-      setInterval(auto_stop,10000)
+  setInterval(auto_record,10).then(
+      setInterval(auto_stop,3000)
   );
 
 
@@ -481,7 +481,7 @@ console.log("Download Video End...")
   }
   while(true){
     setInterval(startbut,100).then(
-      setInterval(stopbut,3000))
+      setInterval(stopbut,15000))
         
       
   }

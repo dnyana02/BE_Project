@@ -33,20 +33,37 @@ def frames_from_video(video_dir, nb_frames = 25, img_size = 224):
 def predictions(video_dir, model, nb_frames = 25, img_size = 224):
 
     X = frames_from_video(video_dir, nb_frames, img_size)
-    X = np.reshape(X, (1, nb_frames, img_size, img_size, 3))
+    try:
+
+        X = np.reshape(X, (1, nb_frames, img_size, img_size, 3))
+        predictions = model.predict(X)
+        preds = predictions.argmax(axis = 1)
+
+        classes = []
+        with open('E:/BE Project/Be_Project_final_v1.0/BE_Project/webcam/'+'classes.txt') as fp:
+           print(fp)
+           for line in fp:
+                classes.append(line.split()[1])
+
+        for i in range(len(preds)):
+            print('Prediction - {} -- {}'.format(preds[i], classes[preds[i]]))
+            return 'Prediction - {} -- {}'.format(preds[i], classes[preds[i]])
     
-    predictions = model.predict(X)
-    preds = predictions.argmax(axis = 1)
+    except ValueError as ve:
+        print("Error")
 
-    classes = []
-    with open('E:/BE Project/Be_Project_final_v1.0/BE_Project/webcam/'+'classes.txt') as fp:
-        print(fp)
-        for line in fp:
-            classes.append(line.split()[1])
+    # predictions = model.predict(X)
+    # preds = predictions.argmax(axis = 1)
 
-    for i in range(len(preds)):
-        print('Prediction - {} -- {}'.format(preds[i], classes[preds[i]]))
-        return 'Prediction - {} -- {}'.format(preds[i], classes[preds[i]])
+    # classes = []
+    # with open('E:/BE Project/Be_Project_final_v1.0/BE_Project/webcam/'+'classes.txt') as fp:
+    #     print(fp)
+    #     for line in fp:
+    #         classes.append(line.split()[1])
+
+    # for i in range(len(preds)):
+    #     print('Prediction - {} -- {}'.format(preds[i], classes[preds[i]]))
+    #     return 'Prediction - {} -- {}'.format(preds[i], classes[preds[i]])
 
 def pred_model():
        ## LOAD MODEL ##
@@ -64,13 +81,30 @@ def pred_model():
     #     time.sleep(3)
     #     predictions(video_dir = latest_file, model = model, nb_frames = 25, img_size = 224)
     #     time.sleep(3)
-    for i in range(1,20):
-        file="E:/BE Project/Be_Project_final_v1.0/BE_Project/test/test ("+str(i)+").mp4"
-        print(file)
-        time.sleep(10)
-        predictions(video_dir =file, model = model, nb_frames = 25, img_size = 224)
-        time.sleep(10)
+    i=1
+    while True:
+        
+        # time.sleep(150)
+        # file="E:/BE Project/Be_Project_final_v1.0/BE_Project/test/test ("+str(i)+").mp4"
+        # print(file)
+        # time.sleep(20)
+        # predictions(video_dir =file, model = model, nb_frames = 25, img_size = 224)
+        # time.sleep(10)
+        file_path="E:/BE Project/Be_Project_final_v1.0/BE_Project/test/test ("+str(i)+").mp4"
+        while not os.path.exists(file_path):
+            time.sleep(1)
 
+        if os.path.isfile(file_path):
+            print(file_path)
+            time.sleep(5)
+            predictions(video_dir =file_path, model = model, nb_frames = 25, img_size = 224)
+            time.sleep(5)
+            
+            # read file
+        
+        # else:
+        #     raise ValueError("%s isn't a file!" % file_path)
+        i+=1
 
 
 ############################################
@@ -89,7 +123,7 @@ def index(request):
     return render(request,'webcam.html')
 
 def livecam_detection(request):
-    time.sleep(20)
+    # time.sleep(120)
     return StreamingHttpResponse(pred_model())
 
 
