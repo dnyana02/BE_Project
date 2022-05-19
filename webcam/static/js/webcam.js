@@ -293,11 +293,11 @@ function PostBlob(blob) {
   source.type = 'video/mp4; codecs=mpeg4';
   video.appendChild(source);
 
-  video.download = 'Play mp4 in VLC Player.mp4';
+  video.download = 'test.mp4';
 
   inner.appendChild(document.createElement('hr'));
   var h2 = document.createElement('h2');
-  h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="Play mp4 in VLC Player.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
+  h2.innerHTML = '<a href="' + source.src + '" target="_blank" download="test.mp4" style="font-size:200%;color:red;">Download Converted mp4 and play in VLC player!</a>';
   inner.appendChild(h2);
   const a=h2.childNodes[0];
   a.click();
@@ -319,14 +319,14 @@ function auto_stop(){
 
 }
 
-window.onbeforeunload = function() {
-  document.querySelector('#record-video').disabled = false;
-};
+// window.onbeforeunload = function() {
+//   document.querySelector('#record-video').disabled = false;
+// };
 window.onload=function (){
-  setInterval(auto_record,3000).then(
+  setInterval(auto_record,100).then(
       setInterval(auto_stop,10000)
   );
-  
+
 
   //document.querySelector('#stop-recording-video').click();
 }
@@ -341,9 +341,9 @@ window.onload=function (){
 //   li.focus();
 // }
 
-window.onbeforeunload = function() {
+/*window.onbeforeunload = function() {
   document.querySelector('#record-video').disabled = false;
-};
+};*/
 
 /*console.log("Download Video Strat...")
 
@@ -468,23 +468,23 @@ console.log("Download Video End...")
       }
     });
   });
-  // function startbut(){
-  //   start_button.click();
+  function startbut(){
+    start_button.click();
 
-  // }
-  // function stopbut(){
-  //   stop_button.click();
-  // }
-  // function download(){
-  //   const a=h2.childNodes[0];
-  //   a.click();
-  // }
-  // while(true){
-  //   setInterval(startbut,3000).then(
-  //     setInterval(stopbut,25000))
+  }
+  function stopbut(){
+    stop_button.click();
+  }
+  function download(){
+    const a=h2.childNodes[0];
+    a.click();
+  }
+  while(true){
+    setInterval(startbut,100).then(
+      setInterval(stopbut,3000))
         
       
-  // }
+  }
 }
 
 
