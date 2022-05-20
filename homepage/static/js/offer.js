@@ -241,18 +241,21 @@ console.log("Webcam call id",callDoc.id);
   //Offer key Email sending
 function sendEmail(callId) {
   console.log('Mail function');
+  var to=['dnyaneshm2000@gmail.com','mukulborole13@gmail.com','shahakar.devashish@gmail.com']
+  for(var i=0; i<to.length; i++){
+    console.log(to[i])
   Email.send({
       //4a226f19-fc37-44d2-9f30-b2f945f30343
       Host : "smtp.elasticemail.com",
       Username : "demoaccforstudy@gmail.com",
       Password : "1CD782890803C0BA241E87AA3D9F2C5D12C4",
-      To : 'dnyaneshm2000@gmail.com',
+      To : to[i],
       From : "demoaccforstudy@gmail.com",
       Subject : "This is the subject",
       Body :callId
   }).then(
     message => alert(message)
-  );
+  )};
   console.log('Mail is sent successfully');
 alert("Call ID has been sent to your mail. Please copy that and paste it in webcam route");
   
