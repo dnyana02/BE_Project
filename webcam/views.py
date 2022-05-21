@@ -10,7 +10,34 @@ import cv2
 # from detection import Detection
 from background_task import background
 import time
-############################################
+import smtplib,ssl
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+################# Mail Function #################
+
+def pred_mail(pred_value):
+    smtp_server="smtp.gmail.com"
+    sender_email="demoaccforstudy@gmail.com"                                  #enter sender mail id
+    receiver_email=["dnyaneshm2000@gmail.com","mukulborole13@gmail.com","shahakar.devashish@gmail.com"]                                #enter receiver mail id
+    port=465
+    pas="Demo@2000"                                      #enter password of account through which you wanna send
+    message="""
+                Subject:Voialation of Social Distancing
+                Respected Sir,
+                Threat Detected : {}
+            """.format(pred_value)
+    context=ssl.create_default_context()
+    server=smtplib.SMTP_SSL(smtp_server,port,context=context)
+    server.login(sender_email,pas)
+    for i in range(len(receiver_email)):
+        server.sendmail(sender_email,receiver_email[i],message)
+    print("Email sent successfully")
+    print("-------------------------------------")
+
+
+
+#################################################
 
 def frames_from_video(video_dir, nb_frames = 25, img_size = 224):
 
@@ -103,9 +130,11 @@ def pred_model():
             pred_list.append(pred)
             ####################  Mail Function   ##################################
           
-            if i%10==0:
-                 print("Maximum of Prediction: ",max(pred_list))
-                 pred_list=[]
+            if i%5==0:
+                max_pred=max(pred_list)
+                print("Maximum of Prediction: ",max_pred)
+                pred_mail(max_pred)
+                pred_list=[]
  
 
         ########################################################
