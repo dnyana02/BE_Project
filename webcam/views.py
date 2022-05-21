@@ -47,7 +47,7 @@ def predictions(video_dir, model, nb_frames = 25, img_size = 224):
 
         for i in range(len(preds)):
             print('Prediction - {} -- {}'.format(preds[i], classes[preds[i]]))
-            return 'Prediction - {} -- {}'.format(preds[i], classes[preds[i]])
+            return  classes[preds[i]]
     
     except ValueError as ve:
         print("Error")
@@ -93,17 +93,28 @@ def pred_model():
         file_path="E:/BE Project/Be_Project_final_v1.0/BE_Project/test/test ("+str(i)+").mp4"
         while not os.path.exists(file_path):
             time.sleep(1)
-
+        
+        pred_list=[]
         if os.path.isfile(file_path):
             print(file_path)
             time.sleep(5)
-            predictions(video_dir =file_path, model = model, nb_frames = 25, img_size = 224)
+            pred=predictions(video_dir =file_path, model = model, nb_frames = 25, img_size = 224)
             time.sleep(5)
-            
-            # read file
+            pred_list.append(pred)
+            ####################  Mail Function   ##################################
+          
+            if i%10==0:
+                 print("Maximum of Prediction: ",max(pred_list))
+                 pred_list=[]
+ 
+
+        ########################################################
+
         
-        # else:
-        #     raise ValueError("%s isn't a file!" % file_path)
+ 
+
+
+
         i+=1
 
 
